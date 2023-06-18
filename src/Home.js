@@ -67,7 +67,7 @@ const Home = () => {
                     dispatch({ type: "ITEM_BOUGHT", id: item.id })
                   }
                 />{" "}
-                {item.name}
+                {item.itemName}
               </label>
             </div>
             <div className="flex-item">

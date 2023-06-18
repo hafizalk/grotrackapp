@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
+import jwtInterceptor from "./jwtInterceptor";
 
 const AddItemModalContainer = ({
   formValid,
@@ -27,6 +28,7 @@ const AddItemModalContainer = ({
   const [newItemForm, setNewItemForm] = useState({});
   const [restockDateValid, setRestockDateValid] = useState(true);
   const [itemNameValid, setItemNameValid] = useState(true);
+  const [itemSaveFeedbackMessage, setFeedbackMessage] = useState(null);
 
   function isRestockDateValid(restockDate, purchaseDate) {
     return (
@@ -43,6 +45,34 @@ const AddItemModalContainer = ({
         : true)
     );
   }
+
+  function handleSaveNewitem(e) {
+    e.preventDefault();
+    var item = { ...newItemForm, id: uuidv4(), itemBought: false };
+    var itemToSave = {
+      email: localStorage.getItem("email"),
+      shoplistItems: [item],
+    };
+    jwtInterceptor
+      .post("http://localhost:9000/shoplist/addshoplistitem", itemToSave)
+      .then((response) => {
+        dispatch({
+          type: "NEW_ITEM",
+          item,
+        });
+        setNewItemForm({});
+        setRestockDateValid(true);
+        setItemNameValid(true);
+        toggle();
+      })
+      .catch((err) => {
+        setFeedbackMessage(
+          "Failed to save item with error: ".concat(
+            err.response ? err.response.data.message : err.message
+          )
+        );
+      });
+  }
   return (
     <Modal isOpen={visible} toggle={toggle} backdrop={"static"}>
       <ModalHeader
@@ -54,6 +84,7 @@ const AddItemModalContainer = ({
               setNewItemForm({});
               setRestockDateValid(true);
               setItemNameValid(true);
+              setFeedbackMessage(null);
               toggle();
             }}
           />
@@ -70,13 +101,13 @@ const AddItemModalContainer = ({
               id="name"
               placeholder="Item Name"
               onChange={(e) => {
-                setNewItemForm({ ...newItemForm, name: e.target.value });
+                setNewItemForm({ ...newItemForm, itemName: e.target.value });
                 setItemNameValid(
-                  itemList.find((item) => item.name === e.target.value) ===
+                  itemList.find((item) => item.ItemName === e.target.value) ===
                     undefined
                 );
                 setFormValid(
-                  itemList.find((item) => item.name === e.target.value) ===
+                  itemList.find((item) => item.ItemName === e.target.value) ===
                     undefined
                 );
               }}
@@ -162,20 +193,18 @@ const AddItemModalContainer = ({
       <ModalFooter>
         <Button
           color="success"
-          onClick={() => {
-            dispatch({
-              type: "NEW_ITEM",
-              item: { ...newItemForm, id: uuidv4(), bought: false },
-            });
-            setNewItemForm({});
-            setRestockDateValid(true);
-            setItemNameValid(true);
-            toggle();
+          onClick={(e) => {
+            handleSaveNewitem(e);
           }}
           disabled={!formValid}
         >
           Save
         </Button>
+        {itemSaveFeedbackMessage && (
+          <FormFeedback className={"d-block"}>
+            {itemSaveFeedbackMessage}
+          </FormFeedback>
+        )}
       </ModalFooter>
     </Modal>
   );

@@ -12,12 +12,11 @@ const Login = () => {
 
   function handleLogin(e, loginForm) {
     e.preventDefault();
-    console.log(loginForm);
     axios
       .post("http://localhost:9000/auth/login", loginForm)
       .then((response) => {
-        const token = response.data.token;
-        const email = response.data.email;
+        const token = response.data.accessToken;
+        const email = response.data.username;
         localStorage.setItem("token", token);
         localStorage.setItem("email", email);
         setFeedbackMessage("Login successful");
