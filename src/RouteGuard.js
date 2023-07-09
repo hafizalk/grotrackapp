@@ -30,6 +30,7 @@ const RouteGuard = ({ children }) => {
     }
   }
 
+  
   return hasJWT() && jwtTokenValid() ? children : <Navigate to="/login" />;
 };
 

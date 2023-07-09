@@ -18,9 +18,10 @@ jwtInterceptor.interceptors.response.use(
       let token = localStorage.getItem("token");
       if (jwt_decode(token).exp < Date.now() / 1000) {
         localStorage.clear();
+        
       }
-    } 
-    
+    }
+
     return Promise.reject(error);
   }
 );

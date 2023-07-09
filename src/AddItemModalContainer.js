@@ -16,6 +16,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
 import jwtInterceptor from "./jwtInterceptor";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddItemModalContainer = ({
   formValid,
@@ -25,6 +28,7 @@ const AddItemModalContainer = ({
   toggle,
   itemList,
 }) => {
+  const navigate = useNavigate();
   const [newItemForm, setNewItemForm] = useState({});
   const [restockDateValid, setRestockDateValid] = useState(true);
   const [itemNameValid, setItemNameValid] = useState(true);
@@ -71,6 +75,11 @@ const AddItemModalContainer = ({
             err.response ? err.response.data.message : err.message
           )
         );
+
+        if (err.response.status === 401) {
+          toast("Access token expired. Redirecting to login page");
+          navigate("/login");
+        }
       });
   }
   return (
