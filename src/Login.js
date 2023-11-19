@@ -5,7 +5,7 @@ import { faUser, faLock, faRocket } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Login = () => {
+const Login = ({server}) => {
   const [loginForm, setLoginForm] = useState({});
   const [feedbackMessage, setFeedbackMessage] = useState(null);
   const navigate = useNavigate();
@@ -13,14 +13,16 @@ const Login = () => {
   function handleLogin(e, loginForm) {
     e.preventDefault();
     axios
-      .post("http://localhost:9000/auth/login", loginForm)
+      .post(`${server}/auth/login`, loginForm)
       .then((response) => {
         const token = response.data.accessToken;
-        const email = response.data.username;
+        const email = response.data.email;
+        const username = response.data.username;
         localStorage.setItem("token", token);
         localStorage.setItem("email", email);
+        localStorage.setItem("username", username);
         setFeedbackMessage("Login successful");
-        navigate("/home");
+        navigate("/ticktick");
       })
       .catch((err) => {
         setFeedbackMessage(

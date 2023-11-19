@@ -4,6 +4,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faRocket } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { serverUrl } from "index";
 
 const SignUp = () => {
   const [signUpForm, setSignUpForm] = useState({});
@@ -13,7 +14,7 @@ const SignUp = () => {
   function handleSignUp(e, signUpForm) {
     e.preventDefault();
     axios
-      .post("http://localhost:9000/auth/signup", signUpForm)
+      .post(`${serverUrl}/auth/signup`, signUpForm)
       .then((result) => {
         console.log(result);
         if (result.data.success) {

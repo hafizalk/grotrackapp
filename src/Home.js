@@ -1,7 +1,21 @@
-import { faCirclePlus, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlus,
+  faCircleXmark,
+  faSignOut,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useModal from "./index";
-import { FormGroup, Input, Label, Progress } from "reactstrap";
+import {
+  Collapse,
+  FormGroup,
+  Label,
+  Nav,
+  Navbar,
+  NavbarToggler,
+  NavItem,
+  Progress,
+} from "reactstrap";
 import AddItemModalContainer from "AddItemModalContainer";
 import React, { useEffect, useReducer, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -30,7 +44,8 @@ const reducer = (state, action) => {
       return [];
   }
 };
-const Home = () => {
+
+const Home = ({ server }) => {
   const navigate = useNavigate();
 
   const { visible, toggle } = useModal();
@@ -39,13 +54,15 @@ const Home = () => {
 
   const [itemList, dispatch] = useReducer(reducer, []);
 
+  const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     fetchAllItemList();
   }, []);
 
   function fetchAllItemList() {
     jwtInterceptor
-      .get("http://localhost:9000/shoplist/getshoplistitems")
+      .get(`${server}/shoplist/getshoplistitems`)
       .then((response) => {
         dispatch({ type: "INIT_LIST", allItems: response.data });
       })
@@ -66,7 +83,7 @@ const Home = () => {
 
   function updateItem(item) {
     jwtInterceptor
-      .post("http://localhost:9000/shoplist/updateshoplistitem", item)
+      .post(`${server}/shoplist/updateshoplistitem`, item)
       .then((response) => {
         dispatch({ type: "ITEM_BOUGHT", id: item.id });
       })
@@ -86,9 +103,7 @@ const Home = () => {
 
   function removeItem(item) {
     jwtInterceptor
-      .delete(
-        "http://localhost:9000/shoplist/removeshoplistitem/".concat(item.id)
-      )
+      .delete(`${server}/shoplist/removeshoplistitem/`.concat(item.id))
       .then((response) => {
         dispatch({ type: "REMOVE_ITEM", item });
       })
@@ -120,16 +135,50 @@ const Home = () => {
         (24 * 3600 * 1000)
     );
   }
+
+  const logout = async () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    navigate("/");
+  };
+
   return (
     <div>
-      <FormGroup>
+      <Navbar color="light" light expand="md">
+        <NavbarToggler
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+        />
+        <Collapse isOpen={isOpen} navbar>
+          <Nav className="container-fluid" navbar>
+            <NavItem className="mr-auto">GroTrack</NavItem>
+            <NavItem className="ms-auto">
+              <FontAwesomeIcon
+                id="userDetails"
+                icon={faUser}
+                title={localStorage.getItem("username")}
+                size="sm"
+              />{" "}
+              <FontAwesomeIcon
+                id="signOut"
+                icon={faSignOut}
+                onClick={() => logout()}
+                title="Sign Out"
+                size="sm"
+              />
+            </NavItem>
+          </Nav>
+        </Collapse>
+      </Navbar>
+      {/* <FormGroup>
         <Input
           id="grocerySearch"
           name="search"
           placeholder="Search items from grocery list"
           type="search"
         />
-      </FormGroup>
+      </FormGroup> */}
       <FormGroup>
         {itemList.map((item) => (
           <div key={item.id} className="flex-container">
@@ -158,9 +207,7 @@ const Home = () => {
               <Progress
                 max={calcMax(item)}
                 value={calcNow(item)}
-                style={{
-                  width: "95%",
-                }}
+                style={{ width: "95%" }}
                 animated
                 color="success"
               ></Progress>

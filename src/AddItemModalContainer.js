@@ -19,6 +19,7 @@ import jwtInterceptor from "./jwtInterceptor";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { serverUrl } from "index";
 
 const AddItemModalContainer = ({
   formValid,
@@ -58,7 +59,7 @@ const AddItemModalContainer = ({
       shoplistItems: [item],
     };
     jwtInterceptor
-      .post("http://localhost:9000/shoplist/addshoplistitem", itemToSave)
+      .post(`${serverUrl}/shoplist/addshoplistitem`, itemToSave)
       .then((response) => {
         dispatch({
           type: "NEW_ITEM",
@@ -109,6 +110,7 @@ const AddItemModalContainer = ({
               type="text"
               id="name"
               placeholder="Item Name"
+              value={""}
               onChange={(e) => {
                 setNewItemForm({ ...newItemForm, itemName: e.target.value });
                 setItemNameValid(

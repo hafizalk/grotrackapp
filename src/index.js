@@ -4,12 +4,18 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ToastContainer } from "react-toastify";
+import { io } from "socket.io-client";
+
+export const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+export const socket = io(serverUrl, {
+  autoConnect: false,
+});
 root.render(
   <React.StrictMode>
     <ToastContainer />
-    <App />
+    <App server={serverUrl} />
   </React.StrictMode>
 );
 
