@@ -130,11 +130,12 @@ const Ticktick = ({ server }) => {
           </Col>
           <Col md={3}>
             <FontAwesomeIcon
+              className="pointer"
               id="copyIcon"
               icon={faCopy}
               title={"Copy Room Id"}
               size="lg"
-              onClick={() => copy(roomId)}
+              onClick={async () => await copy(roomId)}
             />
           </Col>
         </div>

@@ -41,7 +41,7 @@ const Gamepage = ({ server }) => {
     return () => {
       socket.off("stopGame", onGameStopEvent);
     };
-  }, [animalName, countryName, objectName, localStorage]);
+  }, [roomId, animalName, countryName, objectName, localStorage]);
 
   useEffect(() => {
     socket.connect();
@@ -59,7 +59,7 @@ const Gamepage = ({ server }) => {
     return () => {
       socket.off(roomId.concat("result"), onGameResultEvent);
     };
-  }, []);
+  }, [roomId, localStorage]);
 
   const DisplayData = ({ result }) =>
     result.map((res) => {
