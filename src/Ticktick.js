@@ -163,7 +163,8 @@ const Ticktick = ({ server }) => {
             color="success"
             onClick={(e) => {
               e.preventDefault();
-              localStorage.setItem("roomId", roomId);
+              setRoomId(copiedRoomId)
+              localStorage.setItem("roomId", copiedRoomId);
 
               socket.emit("joinGame", {
                 roomId: copiedRoomId,
