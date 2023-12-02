@@ -110,7 +110,6 @@ const AddItemModalContainer = ({
               type="text"
               id="name"
               placeholder="Item Name"
-              value={""}
               onChange={(e) => {
                 setNewItemForm({ ...newItemForm, itemName: e.target.value });
                 setItemNameValid(
