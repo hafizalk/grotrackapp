@@ -5,13 +5,13 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useModal, { socket } from "./index";
 import { Button, Col, FormGroup, Input, Table } from "reactstrap";
 import React, { useEffect, useReducer, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import Banner from "Banner";
+import { socket } from "index";
 
 const Gamepage = ({ server }) => {
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ const Gamepage = ({ server }) => {
         <thead>
           <tr>
             <th>Animal Name</th>
-            <th>Country Capital</th>
+            <th>Country Name</th>
             <th>Object Name</th>
           </tr>
         </thead>

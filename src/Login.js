@@ -5,7 +5,7 @@ import { faUser, faLock, faRocket } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Login = ({server}) => {
+const Login = ({ server }) => {
   const [loginForm, setLoginForm] = useState({});
   const [feedbackMessage, setFeedbackMessage] = useState(null);
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Login = ({server}) => {
         localStorage.setItem("email", email);
         localStorage.setItem("username", username);
         setFeedbackMessage("Login successful");
-        navigate("/ticktick");
+        navigate("/home");
       })
       .catch((err) => {
         setFeedbackMessage(

@@ -1,6 +1,14 @@
 import { faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Collapse, Nav, Navbar, NavbarToggler, NavItem } from "reactstrap";
+import {
+  Collapse,
+  Nav,
+  Navbar,
+  NavbarBrand,
+  NavbarToggler,
+  NavItem,
+  NavLink,
+} from "reactstrap";
 import React, { useEffect, useReducer, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,6 +18,7 @@ const Banner = () => {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
 
   const logout = async () => {
     localStorage.removeItem("token");
@@ -20,14 +29,16 @@ const Banner = () => {
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarToggler
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        />
+        <NavbarBrand href="/">GroTrack</NavbarBrand>
+        <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="container-fluid" navbar>
-            <NavItem className="mr-auto">GroTrack</NavItem>
+            <NavItem className="mr-auto">
+              <NavLink href="/home">GroTrack Cart</NavLink>
+            </NavItem>
+            <NavItem className="mr-auto">
+              <NavLink href="/ticktick">Tick Tick Game</NavLink>
+            </NavItem>
             <NavItem className="ms-auto">
               <FontAwesomeIcon
                 id="userDetails"

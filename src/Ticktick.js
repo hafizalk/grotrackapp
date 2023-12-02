@@ -1,4 +1,9 @@
-import { faCopy, faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCopy,
+  faSignOut,
+  faUser,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
@@ -17,7 +22,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { io } from "socket.io-client";
-import { serverUrl, socket } from "index";
+import { serverUrl, socket, useCopy } from "index";
 import Banner from "Banner";
 import { set } from "lodash";
 import { useCopyToClipboard } from "usehooks-ts";
@@ -28,8 +33,9 @@ const Ticktick = ({ server }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLetter, setSelectedletter] = useState(null);
   const [roomId, setRoomId] = useState(null);
+  const [copiedRoomId, setCopiedRoomId] = useState(null);
   const [roomCreated, setRoomCreated] = useState(false);
-  const [value, copy] = useCopyToClipboard();
+  const { isCopied, handleCopyClick } = useCopy();
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [joinedRoom, setJoinedRoom] = useState(false);
 
@@ -56,6 +62,8 @@ const Ticktick = ({ server }) => {
       } else if (value.status == "playerJoined") {
         toast.success("Player successfully joined game");
       }
+      setSelectedletter(value.selectedLetter);
+      localStorage.setItem("selectedLetter", value.selectedLetter.value);
       navigate("/game");
     }
 
@@ -89,7 +97,6 @@ const Ticktick = ({ server }) => {
   return (
     <div>
       <Banner />
-
       <div className="d-flex p-5 justify-content-around">
         <Col md={6}>
           <Select
@@ -119,7 +126,7 @@ const Ticktick = ({ server }) => {
       </div>
       {roomCreated && (
         <div className="d-flex p-5 justify-content-around">
-          <Col md={9}>
+          <Col md={6}>
             <Input
               id="roomId"
               placeholder="Room Id"
@@ -128,14 +135,16 @@ const Ticktick = ({ server }) => {
               type="text"
             />
           </Col>
-          <Col md={3}>
+          <Col md={6}>
             <FontAwesomeIcon
+              icon={isCopied ? faCheck : faCopy}
+              //color="success"
+              //outline
               className="pointer"
-              id="copyIcon"
-              icon={faCopy}
-              title={"Copy Room Id"}
+              id="copyBtn"
+              onClick={() => handleCopyClick(roomId)}
+              title="Copy"
               size="lg"
-              onClick={async () => await copy(roomId)}
             />
           </Col>
         </div>
@@ -146,24 +155,24 @@ const Ticktick = ({ server }) => {
             id="joinRoom"
             placeholder="Enter Room Id to Join"
             type="text"
-            onChange={(e) => setRoomId(e.target.value)}
+            onChange={(e) => setCopiedRoomId(e.target.value)}
           />
-        </Col>
+        </Col>{" "}
         <Col md={5}>
           <Button
             color="success"
             onClick={(e) => {
               e.preventDefault();
               localStorage.setItem("roomId", roomId);
-              localStorage.setItem("selectedLetter", selectedLetter.value);
+
               socket.emit("joinGame", {
-                roomId,
+                roomId: copiedRoomId,
                 email: localStorage.getItem("email"),
               });
               setJoinedRoom(true);
             }}
           >
-            Join Game
+            Join
           </Button>
         </Col>
       </div>

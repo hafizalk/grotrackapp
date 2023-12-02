@@ -5,7 +5,6 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useModal from "./index";
 import {
   Collapse,
   FormGroup,
@@ -23,6 +22,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import jwtInterceptor from "jwtInterceptor";
 import { useNavigate } from "react-router-dom";
+import Banner from "Banner";
+import { useModal } from "index";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -144,33 +145,7 @@ const Home = ({ server }) => {
 
   return (
     <div>
-      <Navbar color="light" light expand="md">
-        <NavbarToggler
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="container-fluid" navbar>
-            <NavItem className="mr-auto">GroTrack</NavItem>
-            <NavItem className="ms-auto">
-              <FontAwesomeIcon
-                id="userDetails"
-                icon={faUser}
-                title={localStorage.getItem("username")}
-                size="sm"
-              />{" "}
-              <FontAwesomeIcon
-                id="signOut"
-                icon={faSignOut}
-                onClick={() => logout()}
-                title="Sign Out"
-                size="sm"
-              />
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Navbar>
+      <Banner />
       {/* <FormGroup>
         <Input
           id="grocerySearch"
