@@ -198,6 +198,21 @@ const AddItemModalContainer = ({
               }
             />
           </FormGroup>
+          <FormGroup>
+            <Label for="reminder">Restock Reminder Days</Label>
+            <Input
+              type="number"
+              id="reminder"
+              placeholder="Restock Reminder Days"
+              min="1"
+              onChange={(e) =>
+                setNewItemForm({
+                  ...newItemForm,
+                  restockReminderDays: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
         </Form>
       </ModalBody>
       <ModalFooter>

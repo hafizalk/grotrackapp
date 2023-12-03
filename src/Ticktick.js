@@ -5,23 +5,11 @@ import {
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Button,
-  Col,
-  Collapse,
-  Form,
-  FormGroup,
-  Input,
-  Nav,
-  Navbar,
-  NavbarToggler,
-  NavItem,
-} from "reactstrap";
+import { Button, Col, Input } from "reactstrap";
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { io } from "socket.io-client";
 import { serverUrl, socket, useCopy } from "index";
 import Banner from "Banner";
 import { set } from "lodash";
@@ -163,7 +151,7 @@ const Ticktick = ({ server }) => {
             color="success"
             onClick={(e) => {
               e.preventDefault();
-              setRoomId(copiedRoomId)
+              setRoomId(copiedRoomId);
               localStorage.setItem("roomId", copiedRoomId);
 
               socket.emit("joinGame", {
